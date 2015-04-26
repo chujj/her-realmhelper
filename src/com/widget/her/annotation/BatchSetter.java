@@ -1,13 +1,14 @@
 package com.widget.her.annotation;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 public class BatchSetter {
     public static void batchSetter(Object fromObject, Class<?> targetClss,
             Object targetObject) {
         try {
 
-            for (Field field : fromObject.getClass().getFields()) {
+            for (Field field : fromObject.getClass().getDeclaredFields()) {
                 GenerateClassSetter nestSetter = field.getType().getAnnotation(
                         GenerateClassSetter.class);
                 if (nestSetter != null) {
@@ -20,11 +21,16 @@ public class BatchSetter {
                             break;
                         }
                     }
-                    if (sameTypeWithEnclosingObj
-                            && field.get(fromObject) != null) {
-                        batchSetter(field.get(fromObject), targetClss,
-                                targetObject);
-                        System.out.println(field.getName());
+                    if (sameTypeWithEnclosingObj) {
+                        if (! Modifier.isPublic(field.getModifiers())) {
+                            System.out.println(fromObject.getClass().getSimpleName() + "." + field.getName() + ", not public, ignored");
+                        } else {
+                            if (field.get(fromObject) != null) {
+                                batchSetter(field.get(fromObject), targetClss,
+                                        targetObject);
+                                System.out.println("recursive invoke: " + field.getName());
+                            }
+                        }
                     }
                 }
             }

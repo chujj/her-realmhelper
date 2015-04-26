@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Her-Process-EPlugin
+Bundle-SymbolicName: Her-Process-EPlugin;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: her_process_eplugin.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.jdt.apt.core;bundle-version="3.3.500"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Export-Package: com.widget.her.annotation;x-internal:=true
+Import-Package: com.widget.her.annotation
+

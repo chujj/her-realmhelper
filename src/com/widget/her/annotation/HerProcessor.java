@@ -114,7 +114,8 @@ public class HerProcessor extends AbstractProcessor {
                         }
                 }
                 
-                String generateClass = fromClass.substring(packageLoc.length()).replaceAll("\\.", "_") + "Setter";
+                String generateClass = fromClass.substring(packageLoc.length() + 1) // for last '.', which will cause IlleageNameEXception
+                        .replaceAll("\\.", "_") + "Setter";
                 sb.append("package " + packageLoc + ";\n\n");
                 sb.append("public class " + generateClass + " extends " + fromClass + " {\n");
                 for (FieldSet fieldSet: bundle.values()) {
@@ -135,7 +136,7 @@ public class HerProcessor extends AbstractProcessor {
                 }
                 sb.append("}\n");
 
-                JavaFileObject jsource = filer.createSourceFile(packageLoc.replaceAll("\\.", "/") + "/" + generateClass, element);
+                JavaFileObject jsource = filer.createSourceFile(packageLoc  + "." + generateClass, element);
                 jsource.openWriter().append(sb.toString()).close();
                  
             } catch (Exception e) {

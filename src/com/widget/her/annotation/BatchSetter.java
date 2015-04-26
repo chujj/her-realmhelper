@@ -37,7 +37,7 @@ public class BatchSetter {
                         + enclosingClassPrefix;
                 enclosingClass = enclosingClass.getEnclosingClass();
             }
-            Class<?> injectorClass = Class.forName(packageLoc + "._"
+            Class<?> injectorClass = Class.forName(packageLoc + "."
                     + enclosingClassPrefix
                     + fromObject.getClass().getSimpleName() + "Setter");
             injectorClass.getMethod("set", fromObject.getClass(),

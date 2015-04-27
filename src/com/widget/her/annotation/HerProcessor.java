@@ -50,15 +50,40 @@ public class HerProcessor extends AbstractProcessor {
     class FieldSet {
         int clzId;
         String clzName;
-        ArrayList<SimpleEntry<Element, String>> fieldNames;
+        ArrayList<FieldSetEntry> fieldNames;
         public FieldSet(int clzId, String clzName) {
             this.clzId = clzId;
             this.clzName = clzName;
             fieldNames = new ArrayList<>();
         }
         
-        public void addNewTargetField(Element fromField, String targetField) {
-            fieldNames.add(new SimpleEntry<Element, String>(fromField, targetField));
+        public void addNewTargetField(Element fromField, String targetField, boolean errorCheckStringNull) {
+            fieldNames.add(new FieldSetEntry(fromField, targetField, errorCheckStringNull));
+        }
+    }
+    
+    class FieldSetEntry {
+        Element fromElement;
+        String targetField;
+        boolean errorCheckStringNull;
+                                     
+        public FieldSetEntry(Element fromElement, String targetField,
+                boolean errorCheckStringNull) {
+            this.fromElement = fromElement;
+            this.targetField = targetField;
+            this.errorCheckStringNull = errorCheckStringNull;
+        }
+
+        public Element getFromElement() {
+            return fromElement;
+        }
+
+        public String getTargetField() {
+            return targetField;
+        }
+
+        public boolean isErrorCheckStringNull() {
+            return errorCheckStringNull;
         }
     }
 
@@ -104,11 +129,12 @@ public class HerProcessor extends AbstractProcessor {
                 for (Element encloseElement : element.getEnclosedElements()) {
                         if (encloseElement.getAnnotation(FieldToSet.class) != null) {
                             FieldToSet fields = encloseElement.getAnnotation(FieldToSet.class);
+                            boolean errorCheckStringNull = fields.errorWhenStringNull();
                             for (int i = 0; i < fields.targetFields().length; i++) {
                                 TargetFieldDefine targetFieldDefine =  fields.targetFields()[i];
                                 FieldSet target = bundle.get(Integer.valueOf((targetFieldDefine.classId())));
                                 if (target != null) {
-                                    target.addNewTargetField(encloseElement, targetFieldDefine.fieldname());
+                                    target.addNewTargetField(encloseElement, targetFieldDefine.fieldname(), errorCheckStringNull);
                                 }
                             }
                         }
@@ -122,12 +148,16 @@ public class HerProcessor extends AbstractProcessor {
                     
                     sb.append("public static void set("+ fromClass +" fromObject, " + fieldSet.clzName  + " targetObject) { \n");
                     for (int i = 0; i < fieldSet.fieldNames.size(); i++) {
-                        boolean isStringSet = isStringElement(fieldSet.fieldNames.get(i).getKey());
-                        String formFieldName = fieldSet.fieldNames.get(i).getKey().getSimpleName().toString();
-                        String targetFieldName = fieldSet.fieldNames.get(i).getValue();
+                        boolean isStringSet = isStringElement(fieldSet.fieldNames.get(i).getFromElement());
+                        String formFieldName = fieldSet.fieldNames.get(i).getFromElement().getSimpleName().toString();
+                        String targetFieldName = fieldSet.fieldNames.get(i).getTargetField();
                         String setMethod = "";
                         setMethod = "set" + targetFieldName.substring(0, 1).toUpperCase() + targetFieldName.substring(1);
                         if (isStringSet) { // check null first
+                            if (fieldSet.fieldNames.get(i).isErrorCheckStringNull()) { // throw Exception if String null
+                                sb.append("if (fromObject." + formFieldName + " == null) throw new RuntimeException(\"" 
+                                        + fromClass+"." + formFieldName + " is NULL\"); \n");
+                            }
                             sb.append("if (fromObject." + formFieldName + " != null)    ");
                         }
                         sb.append("targetObject." + setMethod + "(fromObject." + formFieldName + ");\n");

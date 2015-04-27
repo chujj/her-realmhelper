@@ -4,6 +4,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 public class BatchSetter {
+    /** 批量将 fromObject 中的数据使用 targetClass的set方法，传入targetObject中
+     * @param fromObject
+     * @param targetClss
+     * @param targetObject
+     */
     public static void batchSetter(Object fromObject, Class<?> targetClss,
             Object targetObject) {
         try {

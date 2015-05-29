@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 public class BatchSetter {
+    public static boolean Debug = true;
+                                       
     /** 批量将 fromObject 中的数据使用 targetClass的set方法，传入targetObject中
      * @param fromObject
      * @param targetClss
@@ -28,12 +30,12 @@ public class BatchSetter {
                     }
                     if (sameTypeWithEnclosingObj) {
                         if (! Modifier.isPublic(field.getModifiers())) {
-                            System.out.println(fromObject.getClass().getSimpleName() + "." + field.getName() + ", not public, ignored");
+                            if (Debug) System.out.println(fromObject.getClass().getSimpleName() + "." + field.getName() + ", not public, ignored");
                         } else {
                             if (field.get(fromObject) != null) {
                                 batchSetter(field.get(fromObject), targetClss,
                                         targetObject);
-                                System.out.println("recursive invoke: " + field.getName());
+                                if (Debug) System.out.println("recursive invoke: " + field.getName());
                             }
                         }
                     }

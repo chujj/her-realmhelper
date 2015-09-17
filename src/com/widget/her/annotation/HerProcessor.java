@@ -196,6 +196,11 @@ public class HerProcessor extends AbstractProcessor {
         sb.append("    table.clear();\n");
         sb.append("    long size = table.getColumnCount();\n");
         sb.append("    for (long i = 0; i < size; i++) {\n");
+        sb.append("        if (table.hasSearchIndex(i)) {\n");
+        sb.append("            table.removeSearchIndex(i);\n");
+        sb.append("        }\n");
+        sb.append("    }\n");
+        sb.append("    for (long i = 0; i < size; i++) {\n");
         sb.append("    table.removeColumn(0);\n");
         sb.append("    }\n");
         sb.append("}\n\n");
@@ -256,8 +261,11 @@ public class HerProcessor extends AbstractProcessor {
             // primary key
             if (primaryKey != null) {
                 sb.append("\n");
-                sb.append("    table.setIndex(table.getColumnIndex(\"" + primaryKey + "\"));\n");
+//                sb.append("    table.setIndex(table.getColumnIndex(\"" + primaryKey + "\"));\n");
+                sb.append("    table.addSearchIndex(table.getColumnIndex(\"" + primaryKey + "\"));\n");
                 sb.append("    table.setPrimaryKey(\"" + primaryKey + "\");\n");
+            } else {
+                sb.append("    table.setPrimaryKey(\"\");\n");
             }
             sb.append("    }\n");
         }

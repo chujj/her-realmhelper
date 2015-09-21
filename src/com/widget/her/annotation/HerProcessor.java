@@ -117,7 +117,7 @@ public class HerProcessor extends AbstractProcessor {
             RoundEnvironment roundEnv) {
 
         for (Element element : roundEnv.getElementsAnnotatedWith(GenerateClassSetter.class)) {
-            messager.printMessage(Kind.WARNING, "Find You! DestSetter", element);
+//            messager.printMessage(Kind.WARNING, "Find You! DestSetter", element);
 
             try {
                 GenerateClassSetter setter = element.getAnnotation(GenerateClassSetter.class);
@@ -209,17 +209,17 @@ public class HerProcessor extends AbstractProcessor {
             for (Element e: enclosedElements) {
 //                if (e instanceof ExecutableElement) continue;
 
-                System.out.println("-" + e.getSimpleName());
+//                System.out.println("-" + e.getSimpleName());
                 if (!(e instanceof VariableElement)) continue;
                 
                 VariableElement var = (VariableElement) e;
                 if (var.getConstantValue() != null) continue; // skip final
 
                 if (var.getSimpleName().toString().contains("relation1")) {
-                    System.out.println("find userCache");
+//                    System.out.println("find userCache");
                 }
                 TypeKind kind = var.asType().getKind();
-                System.out.println(var.getSimpleName());
+//                System.out.println(var.getSimpleName());
                 if (e.getAnnotation(PrimaryKeyMark.class) != null) {
                     primaryKey = var.getSimpleName().toString();
                 }

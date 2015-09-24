@@ -23,32 +23,31 @@ annotation标记程序中处理点。
 
 * 以gradle引用
 
-``
+```
     repositories {
         // ...
         maven { url "https://jitpack.io" }
     }
 
-
     dependencies {
         compile 'com.github.chujj:her-realmhelper:[Tag/commit hash/-SNAPSHOT]'
     }
-``
+```
 
 
 ## Usage
 
 数据映射功能:
-``
+```
     @FieldToSet
     @GenerateClassSetter
 	BatchSetter.batchSetter()
-``
+```
 Realm数据表升级相关:
-``
+```
     @PrimaryKeyMark
     @GenerateRealmTableHelper
-``
+```
 
 
 

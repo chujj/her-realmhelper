@@ -1,4 +1,4 @@
-# increase-androidmanifest-version
+# her-realmhelper
 
 为工作中使用[Realm-0.80.0](https://github.com/realm/realm-java)数据库时制作的
 工具插件。仿照
@@ -19,7 +19,20 @@ annotation标记程序中处理点。
 
 ## Installation
 
-在eclipse中打开annotation processor，指定导出后的jar即可
+* 在eclipse中打开annotation processor，指定导出后的jar即可
+
+* 以gradle引用
+    repositories {
+        // ...
+        maven { url "https://jitpack.io" }
+    }
+
+
+    dependencies {
+        compile 'com.github.chujj:her-realmhelper:[Tag/commit hash/-SNAPSHOT]'
+    }
+
+
 
 ## Usage
 

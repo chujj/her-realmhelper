@@ -22,6 +22,8 @@ annotation标记程序中处理点。
 * 在eclipse中打开annotation processor，指定导出后的jar即可
 
 * 以gradle引用
+
+``
     repositories {
         // ...
         maven { url "https://jitpack.io" }
@@ -31,22 +33,22 @@ annotation标记程序中处理点。
     dependencies {
         compile 'com.github.chujj:her-realmhelper:[Tag/commit hash/-SNAPSHOT]'
     }
-
+``
 
 
 ## Usage
 
 数据映射功能:
-
+``
     @FieldToSet
     @GenerateClassSetter
 	BatchSetter.batchSetter()
-
+``
 Realm数据表升级相关:
-
+``
     @PrimaryKeyMark
     @GenerateRealmTableHelper
-
+``
 
 
 
